@@ -1,5 +1,5 @@
 import {
-  HeartPulse, Landmark, GraduationCap, ShoppingBag, Factory, Truck,
+  HeartPulse, Landmark, GraduationCap, ShoppingBag, ShoppingCart, Factory, Truck,
   Building2, UtensilsCrossed, Banknote, Wallet, ShieldCheck, HardHat,
   type LucideIcon,
 } from "lucide-react";
@@ -126,7 +126,7 @@ export const industries: IndustryDef[] = [
   },
   {
     slug: "e-commerce",
-    icon: ShoppingBag,
+    icon: ShoppingCart,
     name: "E-Commerce",
     hero: "D2C, B2B and marketplace commerce engineered for growth-stage brands.",
     overview:

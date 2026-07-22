@@ -26,11 +26,11 @@ import { SectionEyebrow } from "@/components/site/SectionEyebrow";
 import { HeroIllustration } from "@/components/site/HeroIllustration";
 import { TechMarquee } from "@/components/site/TechMarquee";
 import { industries as industriesData } from "@/lib/industries-data";
-import heroWave from "@/assets/hero-wave.jpg";
-import teamCollab from "@/assets/team-collab.jpg";
-import cloudInfra from "@/assets/cloud-infra.jpg";
-import dashboard from "@/assets/dashboard.jpg";
-import developer from "@/assets/developer.jpg";
+import heroVideo from "@/assets/images/3D_hero_animation_premium_design.mp4";
+import teamCollab from "@/assets/images/businessman-thinking.webp";
+import cloudInfra from "@/assets/images/claud-computing.webp";
+import dashboard from "@/assets/images/data_analesys.webp";
+import developer from "@/assets/images/react_developer.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -73,10 +73,25 @@ function Home() {
     <SiteLayout>
       {/* HERO */}
       <section className="relative flex min-h-screen items-center overflow-hidden bg-ink text-white">
-        <div className="absolute inset-0">
-          <img src={heroWave} alt="" width={1600} height={1200} className="h-full w-full object-cover opacity-70" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.15_0.03_200/0.6),oklch(0.13_0.025_200)_85%)]" />
-          <div className="absolute inset-0 grid-fade opacity-60" />
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <video
+            src={heroVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="h-full w-full object-cover scale-[1.03] transition-opacity duration-1000"
+            style={{
+              transform: "translateZ(0)",
+              willChange: "transform",
+            }}
+          />
+          {/* Multi-stage dark gradient overlays for maximum contrast & premium look */}
+          <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/80 to-ink/65" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.19_0.03_200/0.7),oklch(0.13_0.025_200)_90%)]" />
+          <div className="absolute inset-0 grid-fade opacity-40" />
         </div>
 
         <div className="relative mx-auto w-full max-w-7xl px-6 pt-32 pb-20 md:px-8 md:pt-36 md:pb-24">

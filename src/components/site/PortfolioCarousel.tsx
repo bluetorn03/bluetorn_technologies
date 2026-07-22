@@ -1,80 +1,117 @@
 import { useState } from "react";
-import { motion } from "motion/react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 
-export type PortfolioSlide = { img: string; title: string; tag: string };
+export type PortfolioSlide = {
+  img: string;
+  title: string;
+  tag: string;
+  category?: string;
+  heightClass?: string; // Varied heights like the reference layout
+};
 
-/**
- * Cover-flow style 3D rotating carousel. Cards fan out around a central card
- * with soft reflections and depth. Click a card to bring it to center.
- */
-export function PortfolioCarousel({ slides }: { slides: PortfolioSlide[] }) {
-  const [active, setActive] = useState(0);
-  const n = slides.length;
+interface PortfolioCarouselProps {
+  slides: PortfolioSlide[];
+  onSelectSlide?: (slide: PortfolioSlide) => void;
+}
+
+export function PortfolioCarousel({ slides }: PortfolioCarouselProps) {
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Duplicate slides array to create a seamless infinite loop
+  const infiniteSlides = [...slides, ...slides, ...slides];
 
   return (
-    <div className="relative mx-auto h-[520px] w-full max-w-6xl [perspective:1600px] md:h-[560px]">
-      <div className="relative h-full w-full [transform-style:preserve-3d]">
-        {slides.map((s, i) => {
-          // shortest offset around the ring
-          let offset = i - active;
-          if (offset > n / 2) offset -= n;
-          if (offset < -n / 2) offset += n;
-          const abs = Math.abs(offset);
-          const hidden = abs > 3;
-          const x = offset * 200;
-          const rotY = offset * -22;
-          const z = -abs * 140;
-          const scale = 1 - abs * 0.08;
-          const opacity = hidden ? 0 : abs === 0 ? 1 : 0.85 - abs * 0.15;
+    <div className="relative w-full overflow-hidden py-6">
+      {/* Top and Bottom subtle gradients for depth */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-ink to-transparent"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-ink to-transparent"
+      />
+
+      {/* Side edge fades */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-0 top-0 bottom-0 z-20 w-16 md:w-32 bg-gradient-to-r from-ink via-ink/80 to-transparent"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-0 top-0 bottom-0 z-20 w-16 md:w-32 bg-gradient-to-l from-ink via-ink/80 to-transparent"
+      />
+
+      {/* Main Marquee Track */}
+      <div
+        className="flex w-max items-center gap-6 md:gap-8 hover:[animation-play-state:paused]"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        style={{
+          animation: "portfolio-marquee 45s linear infinite",
+          animationPlayState: isPaused ? "paused" : "running",
+        }}
+      >
+        {infiniteSlides.map((slide, index) => {
+          // Preset varied card heights for a dynamic layout inspired by the reference
+          const heightClasses = [
+            "h-[340px] md:h-[400px]",
+            "h-[290px] md:h-[350px]",
+            "h-[380px] md:h-[440px]",
+            "h-[310px] md:h-[370px]",
+            "h-[360px] md:h-[420px]",
+          ];
+          const heightClass =
+            slide.heightClass || heightClasses[index % heightClasses.length];
+
           return (
-            <motion.button
-              key={s.title + i}
-              type="button"
-              onClick={() => setActive(i)}
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform focus:outline-none"
-              style={{ zIndex: 100 - abs }}
-              animate={{ x, rotateY: rotY, z, scale, opacity }}
-              transition={{ type: "spring", stiffness: 90, damping: 20, mass: 0.9 }}
+            <div
+              key={`${slide.title}-${index}`}
+              className={`group relative w-[260px] sm:w-[300px] md:w-[340px] shrink-0 overflow-hidden rounded-[2.25rem] border border-white/15 bg-card/10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-teal/50 hover:shadow-[0_30px_70px_-20px_rgba(56,224,208,0.4)] ${heightClass}`}
             >
-              <div className="relative">
-                <div className="h-[320px] w-[260px] overflow-hidden rounded-3xl border border-white/10 bg-card shadow-[0_40px_80px_-30px_oklch(0_0_0/0.5)] md:h-[380px] md:w-[300px]">
-                  <img src={s.img} alt={s.title} loading="lazy" className="h-full w-full object-cover" />
-                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-widest text-ink">
-                    {s.tag}
-                  </span>
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent p-5">
-                    <div className="font-display text-lg font-semibold text-white">{s.title}</div>
-                  </div>
-                </div>
-                {/* Reflection */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute left-0 right-0 top-full h-24 overflow-hidden rounded-b-3xl"
-                  style={{
-                    background: `linear-gradient(to bottom, oklch(1 0 0 / 0.14), transparent 80%)`,
-                    transform: "scaleY(-1)",
-                    transformOrigin: "top",
-                    maskImage: "linear-gradient(to bottom, black, transparent 70%)",
-                  }}
-                >
-                  <img src={s.img} alt="" aria-hidden className="h-full w-full object-cover opacity-30" />
-                </div>
+              {/* Image */}
+              <img
+                src={slide.img}
+                alt={slide.title}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent transition-opacity duration-300 group-hover:from-ink/95 group-hover:via-ink/40" />
+
+              {/* Top Tag Badge */}
+              <div className="absolute left-4 top-4 z-10 flex items-center gap-1.5 rounded-full border border-white/20 bg-ink/70 px-3.5 py-1.5 text-[0.7rem] font-medium tracking-wide text-white backdrop-blur-md transition-all group-hover:border-teal/50 group-hover:text-teal-glow">
+                <Sparkles className="h-3 w-3 text-teal" />
+                {slide.tag}
               </div>
-            </motion.button>
+
+              {/* Bottom Content */}
+              <div className="absolute inset-x-0 bottom-0 z-10 p-5 md:p-6 text-white transition-transform duration-300">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[0.72rem] font-semibold uppercase tracking-wider text-teal">
+                    {slide.category || "Case Study"}
+                  </span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-all duration-300 group-hover:border-teal group-hover:bg-teal group-hover:text-ink">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </div>
+                <h3 className="mt-1.5 font-display text-lg font-semibold leading-snug md:text-xl text-white group-hover:text-teal-glow transition-colors">
+                  {slide.title}
+                </h3>
+              </div>
+            </div>
           );
         })}
       </div>
 
-      <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-2">
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            aria-label={`Show slide ${i + 1}`}
-            onClick={() => setActive(i)}
-            className={`h-1.5 rounded-full transition-all ${i === active ? "w-8 bg-teal" : "w-2 bg-white/30 hover:bg-white/60"}`}
-          />
-        ))}
-      </div>
+      {/* Marquee Animation Keyframes injected in inline style */}
+      <style>{`
+        @keyframes portfolio-marquee {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-33.333333%); }
+        }
+      `}</style>
     </div>
   );
 }

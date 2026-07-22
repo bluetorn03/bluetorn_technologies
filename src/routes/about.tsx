@@ -4,7 +4,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionEyebrow } from "@/components/site/SectionEyebrow";
 import { Reveal } from "@/components/site/Reveal";
 import { MagneticButton } from "@/components/site/MagneticButton";
-import teamCollab from "@/assets/team-collab.jpg";
+import teamCollab from "@/assets/images/businessman-thinking.webp";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
