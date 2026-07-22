@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "motion/react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -25,6 +24,8 @@ import { Typewriter } from "@/components/site/Typewriter";
 import { Reveal } from "@/components/site/Reveal";
 import { SectionEyebrow } from "@/components/site/SectionEyebrow";
 import { HeroIllustration } from "@/components/site/HeroIllustration";
+import { TechMarquee } from "@/components/site/TechMarquee";
+import { industries as industriesData } from "@/lib/industries-data";
 import heroWave from "@/assets/hero-wave.jpg";
 import teamCollab from "@/assets/team-collab.jpg";
 import cloudInfra from "@/assets/cloud-infra.jpg";
@@ -49,15 +50,15 @@ export const Route = createFileRoute("/")({
 });
 
 const services = [
-  { icon: Code2, title: "Custom Software", desc: "Bespoke engineering for mission-critical business logic and scale.", tags: ["Architecture", "APIs", "Security"] },
-  { icon: Layers, title: "Web Development", desc: "Corporate sites, dashboards and web apps engineered for speed and SEO.", tags: ["Next.js", "React", "PWA"] },
-  { icon: Smartphone, title: "Mobile Apps", desc: "iOS, Android and cross-platform apps with native-grade UX.", tags: ["Flutter", "React Native", "Swift"] },
-  { icon: BrainCircuit, title: "AI Solutions", desc: "LLM agents, RAG systems and AI automations tailored to your data.", tags: ["OpenAI", "LangChain", "RAG"] },
-  { icon: Database, title: "ERP Solutions", desc: "Manufacturing, hospital, school and inventory ERP with role-based access.", tags: ["Workflow", "RBAC", "Reporting"] },
-  { icon: Workflow, title: "CRM Development", desc: "Sales, service and lead-management CRMs built around your process.", tags: ["Pipelines", "Automation", "Insights"] },
-  { icon: Boxes, title: "SaaS Platforms", desc: "Multi-tenant, subscription-ready SaaS products from MVP to scale.", tags: ["Multi-tenant", "Billing", "Auth"] },
-  { icon: Cloud, title: "Cloud & DevOps", desc: "AWS, Azure, GCP infrastructure, cloud migration and CI/CD pipelines.", tags: ["AWS", "Docker", "CI/CD"] },
-  { icon: Palette, title: "UI / UX Design", desc: "Product, dashboard and mobile design systems built for conversion.", tags: ["Product", "Design Systems", "Research"] },
+  { slug: "software-development", icon: Code2, title: "Custom Software", desc: "Bespoke engineering for mission-critical business logic and scale.", tags: ["Architecture", "APIs", "Security"] },
+  { slug: "web-development", icon: Layers, title: "Web Development", desc: "Corporate sites, dashboards and web apps engineered for speed and SEO.", tags: ["Next.js", "React", "PWA"] },
+  { slug: "mobile-development", icon: Smartphone, title: "Mobile Apps", desc: "iOS, Android and cross-platform apps with native-grade UX.", tags: ["Flutter", "React Native", "Swift"] },
+  { slug: "ai-solutions", icon: BrainCircuit, title: "AI Solutions", desc: "LLM agents, RAG systems and AI automations tailored to your data.", tags: ["OpenAI", "LangChain", "RAG"] },
+  { slug: "erp-solutions", icon: Database, title: "ERP Solutions", desc: "Manufacturing, hospital, school and inventory ERP with role-based access.", tags: ["Workflow", "RBAC", "Reporting"] },
+  { slug: "crm-development", icon: Workflow, title: "CRM Development", desc: "Sales, service and lead-management CRMs built around your process.", tags: ["Pipelines", "Automation", "Insights"] },
+  { slug: "saas-development", icon: Boxes, title: "SaaS Platforms", desc: "Multi-tenant, subscription-ready SaaS products from MVP to scale.", tags: ["Multi-tenant", "Billing", "Auth"] },
+  { slug: "cloud-devops", icon: Cloud, title: "Cloud & DevOps", desc: "AWS, Azure, GCP infrastructure, cloud migration and CI/CD pipelines.", tags: ["AWS", "Docker", "CI/CD"] },
+  { slug: "ui-ux-design", icon: Palette, title: "UI / UX Design", desc: "Product, dashboard and mobile design systems built for conversion.", tags: ["Product", "Design Systems", "Research"] },
 ];
 
 const process = [
@@ -65,17 +66,6 @@ const process = [
   { n: "02", title: "Design", desc: "Wireframes, prototypes and high-fidelity interfaces with a componentized design system your engineers can build against." },
   { n: "03", title: "Engineering", desc: "Two-week sprints, code reviews, automated tests and observability baked in from day one. You see progress every week." },
   { n: "04", title: "Launch & Scale", desc: "Blue/green deploys, performance tuning and 24×7 monitoring. We stay on as a long-term engineering partner, not a vendor." },
-];
-
-const industries = [
-  "Manufacturing", "Healthcare", "Education", "Retail", "E-Commerce",
-  "Logistics", "Real Estate", "Hospitality", "Finance", "Banking",
-  "Insurance", "Construction",
-];
-
-const stack = [
-  "React", "Next.js", "TypeScript", "Node.js", "Python", "Laravel", "PostgreSQL",
-  "MongoDB", "AWS", "Azure", "Docker", "OpenAI", "Flutter", "Tailwind", "Redis",
 ];
 
 function Home() {
@@ -90,7 +80,7 @@ function Home() {
         </div>
 
         <div className="relative mx-auto w-full max-w-7xl px-6 pt-32 pb-20 md:px-8 md:pt-36 md:pb-24">
-          <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
+          <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
             <div>
               <Reveal>
                 <SectionEyebrow>Official Website</SectionEyebrow>
@@ -149,16 +139,8 @@ function Home() {
               </Reveal>
             </div>
 
-            {/* Hero 3D Illustration — framed by stat chips */}
+            {/* Hero 3D Illustration — rotating service ecosystem */}
             <div className="relative hidden lg:block">
-              <div className="pointer-events-none absolute -left-2 top-6 z-10 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-xl">
-                <div className="text-[0.62rem] uppercase tracking-widest text-teal">Uptime</div>
-                <div className="mt-1 font-display text-xl font-semibold text-white">99.99%</div>
-              </div>
-              <div className="pointer-events-none absolute -right-2 bottom-6 z-10 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-xl">
-                <div className="text-[0.62rem] uppercase tracking-widest text-teal">Delivery</div>
-                <div className="mt-1 font-display text-xl font-semibold text-white">2-week sprints</div>
-              </div>
               <HeroIllustration />
             </div>
           </div>
@@ -216,7 +198,7 @@ function Home() {
           <div className="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {services.map((s, i) => (
               <Reveal key={s.title} i={i % 3}>
-                <div className="card-hover group h-full rounded-3xl border border-border bg-card p-7">
+                <Link to="/services/$slug" params={{ slug: s.slug }} className="card-hover group block h-full rounded-3xl border border-border bg-card p-7">
                   <div className="grid h-12 w-12 place-items-center rounded-2xl bg-teal/10 text-teal transition-colors group-hover:bg-teal group-hover:text-white">
                     <s.icon className="h-5 w-5" />
                   </div>
@@ -229,10 +211,10 @@ function Home() {
                       </span>
                     ))}
                   </div>
-                  <div className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-teal opacity-0 transition-opacity group-hover:opacity-100">
-                    Learn more <ArrowUpRight className="h-4 w-4" />
+                  <div className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-teal">
+                    Learn more <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </div>
-                </div>
+                </Link>
               </Reveal>
             ))}
           </div>
@@ -327,28 +309,25 @@ function Home() {
         </div>
       </section>
 
-      {/* TECH STACK MARQUEE */}
+      {/* TECH STACK — dual marquee */}
       <section className="border-y border-border bg-background">
-        <div className="mx-auto max-w-7xl px-6 py-16 md:px-8">
+        <div className="mx-auto max-w-7xl px-6 py-20 md:px-8">
           <Reveal>
             <div className="text-center">
               <SectionEyebrow>Technology Stack</SectionEyebrow>
-              <h3 className="mt-4 font-display text-2xl text-muted-foreground">
+              <h3 className="mt-4 font-display text-3xl font-semibold md:text-4xl">
                 Modern tools. Rigorously chosen. Engineered to last.
               </h3>
+              <p className="mt-4 text-muted-foreground">Hover to pause.</p>
             </div>
           </Reveal>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            {stack.map((t) => (
-              <span key={t} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground/80">
-                {t}
-              </span>
-            ))}
+          <div className="mt-14">
+            <TechMarquee />
           </div>
         </div>
       </section>
 
-      {/* INDUSTRIES */}
+      {/* INDUSTRIES — real icons per sector */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-6 py-24 md:px-8 md:py-28">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
@@ -361,20 +340,31 @@ function Home() {
                 From regulated healthcare and finance to fast-moving retail and logistics, our teams
                 bring domain fluency to every engagement.
               </p>
+              <div className="mt-8">
+                <MagneticButton to="/industries" variant="outline">
+                  Explore Industries <ArrowUpRight className="h-4 w-4" />
+                </MagneticButton>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {industries.map((ind, i) => (
-                <Reveal key={ind} i={i % 6}>
-                  <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-colors hover:border-teal">
-                    <Sparkles className="h-4 w-4 shrink-0 text-teal" />
-                    <span className="text-sm font-medium">{ind}</span>
-                  </div>
-                </Reveal>
-              ))}
+              {industriesData.slice(0, 12).map((ind, i) => {
+                const Icon = ind.icon;
+                return (
+                  <Reveal key={ind.slug} i={i % 6}>
+                    <Link to="/industries/$slug" params={{ slug: ind.slug }} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-all hover:-translate-y-0.5 hover:border-teal hover:shadow-[0_20px_40px_-25px_oklch(0.72_0.13_190/0.4)]">
+                      <div className="grid h-9 w-9 place-items-center rounded-xl bg-teal/10 text-teal transition-colors group-hover:bg-teal group-hover:text-white">
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <span className="text-sm font-medium">{ind.name}</span>
+                    </Link>
+                  </Reveal>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
+
 
       {/* WHY BLUETORN */}
       <section className="bg-surface">

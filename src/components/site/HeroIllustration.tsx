@@ -1,25 +1,11 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-
-/**
- * A pure-CSS/SVG 3D hero scene: orbital rings, rotating cubes and floating
- * platonic shapes with mouse parallax + continuous breathing. No external
- * image — the whole composition is rendered live in the DOM/GPU.
- */
+import { BrainCircuit, Cloud, Code2, Cog, Database, Globe, LineChart, Palette, ShieldCheck, ShoppingBag, Smartphone, Workflow } from "lucide-react";
 
 function Cube({
-  size,
-  color = "rgba(56,224,208,0.85)",
-  face = "rgba(56,224,208,0.18)",
-  duration = 16,
-  reverse = false,
-}: {
-  size: number;
-  color?: string;
-  face?: string;
-  duration?: number;
-  reverse?: boolean;
-}) {
+  size, color = "rgba(56,224,208,0.85)", face = "rgba(56,224,208,0.16)",
+  duration = 20, reverse = false,
+}: { size: number; color?: string; face?: string; duration?: number; reverse?: boolean }) {
   const half = size / 2;
   const faces = [
     { t: `translateZ(${half}px)` },
@@ -43,7 +29,7 @@ function Cube({
             transform: f.t,
             borderColor: color,
             background: face,
-            boxShadow: `inset 0 0 30px ${color}`,
+            boxShadow: `inset 0 0 40px ${color}`,
           }}
         />
       ))}
@@ -51,27 +37,39 @@ function Cube({
   );
 }
 
+// The rotating service cards. Cards enter and exit on a schedule so only a
+// subset is visible at any time, revealing a rotating tech ecosystem.
+const serviceCards = [
+  { icon: Code2,        label: "Software",     angle:  90, radius: 46 },
+  { icon: Globe,        label: "Web",          angle: 135, radius: 48 },
+  { icon: Smartphone,   label: "Mobile",       angle: 180, radius: 46 },
+  { icon: BrainCircuit, label: "AI",           angle: 225, radius: 48 },
+  { icon: Database,     label: "ERP",          angle: 270, radius: 46 },
+  { icon: Workflow,     label: "CRM",          angle: 315, radius: 48 },
+  { icon: Cloud,        label: "Cloud",        angle:   0, radius: 46 },
+  { icon: Palette,      label: "UI / UX",      angle:  45, radius: 48 },
+  { icon: Cog,          label: "Automation",   angle: 110, radius: 52 },
+  { icon: ShieldCheck,  label: "Security",     angle: 250, radius: 52 },
+  { icon: LineChart,    label: "Marketing",    angle: 200, radius: 52 },
+  { icon: ShoppingBag,  label: "E-Commerce",   angle:  20, radius: 52 },
+];
+
+// Each card owns a slot on a rotating window so 4-5 are visible at a time.
+const CYCLE = 12; // total seconds for full ecosystem cycle
+const VISIBLE = 5;
+
 export function HeroIllustration() {
   const ref = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
 
-  const sx = useSpring(mx, { stiffness: 70, damping: 20, mass: 0.6 });
-  const sy = useSpring(my, { stiffness: 70, damping: 20, mass: 0.6 });
+  const sx = useSpring(mx, { stiffness: 60, damping: 22, mass: 0.7 });
+  const sy = useSpring(my, { stiffness: 60, damping: 22, mass: 0.7 });
 
-  const rotateY = useTransform(sx, [-0.5, 0.5], [12, -12]);
-  const rotateX = useTransform(sy, [-0.5, 0.5], [-10, 10]);
-  const tX = useTransform(sx, [-0.5, 0.5], [-18, 18]);
-  const tY = useTransform(sy, [-0.5, 0.5], [-14, 14]);
-
-  const pAX = useTransform(sx, [-0.5, 0.5], [30, -30]);
-  const pAY = useTransform(sy, [-0.5, 0.5], [22, -22]);
-  const pBX = useTransform(sx, [-0.5, 0.5], [-36, 36]);
-  const pBY = useTransform(sy, [-0.5, 0.5], [-18, 18]);
-  const pCX = useTransform(sx, [-0.5, 0.5], [24, -24]);
-  const pCY = useTransform(sy, [-0.5, 0.5], [-28, 28]);
-  const pDX = useTransform(sx, [-0.5, 0.5], [-22, 22]);
-  const pDY = useTransform(sy, [-0.5, 0.5], [26, -26]);
+  const rotateY = useTransform(sx, [-0.5, 0.5], [14, -14]);
+  const rotateX = useTransform(sy, [-0.5, 0.5], [-12, 12]);
+  const tX = useTransform(sx, [-0.5, 0.5], [-20, 20]);
+  const tY = useTransform(sy, [-0.5, 0.5], [-16, 16]);
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = ref.current;
@@ -80,18 +78,15 @@ export function HeroIllustration() {
     mx.set((e.clientX - r.left) / r.width - 0.5);
     my.set((e.clientY - r.top) / r.height - 0.5);
   };
-  const onLeave = () => {
-    mx.set(0);
-    my.set(0);
-  };
+  const onLeave = () => { mx.set(0); my.set(0); };
 
   return (
     <div
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className="relative mx-auto aspect-square w-full max-w-[640px]"
-      style={{ perspective: 1400 }}
+      className="relative mx-auto aspect-square w-full max-w-[820px]"
+      style={{ perspective: 1600 }}
     >
       {/* Ambient light pool */}
       <motion.div
@@ -102,22 +97,38 @@ export function HeroIllustration() {
             "radial-gradient(circle at 50% 50%, rgba(56,224,208,0.35), rgba(56,224,208,0.05) 45%, transparent 70%)",
           filter: "blur(30px)",
         }}
-        animate={{ opacity: [0.55, 0.85, 0.55], scale: [0.95, 1.05, 0.95] }}
-        transition={{ duration: 7, ease: "easeInOut", repeat: Infinity }}
+        animate={{ opacity: [0.5, 0.85, 0.5], scale: [0.94, 1.06, 0.94] }}
+        transition={{ duration: 8, ease: "easeInOut", repeat: Infinity }}
       />
-
-      {/* Secondary purple bloom for depth */}
       <motion.div
         aria-hidden
-        className="absolute inset-8 rounded-full"
+        className="absolute inset-10 rounded-full"
         style={{
-          background:
-            "radial-gradient(circle at 30% 30%, rgba(120,140,255,0.25), transparent 60%)",
-          filter: "blur(40px)",
+          background: "radial-gradient(circle at 35% 35%, rgba(120,140,255,0.22), transparent 60%)",
+          filter: "blur(50px)",
         }}
         animate={{ opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 9, ease: "easeInOut", repeat: Infinity }}
+        transition={{ duration: 10, ease: "easeInOut", repeat: Infinity }}
       />
+
+      {/* Connecting node lines (SVG) */}
+      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full opacity-40" aria-hidden>
+        <defs>
+          <linearGradient id="line-grad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="rgba(56,224,208,0.5)" />
+            <stop offset="100%" stopColor="rgba(56,224,208,0)" />
+          </linearGradient>
+        </defs>
+        {serviceCards.map((c, i) => {
+          const rad = (c.angle * Math.PI) / 180;
+          const x = 50 + Math.cos(rad) * c.radius;
+          const y = 50 + Math.sin(rad) * c.radius;
+          return (
+            <line key={i} x1="50" y1="50" x2={x} y2={y}
+              stroke="url(#line-grad)" strokeWidth="0.15" strokeDasharray="0.6 0.6" />
+          );
+        })}
+      </svg>
 
       {/* 3D scene */}
       <motion.div
@@ -126,104 +137,94 @@ export function HeroIllustration() {
       >
         {/* Orbital rings */}
         <motion.div
-          className="absolute inset-[8%] rounded-full border border-teal/25"
+          className="absolute inset-[6%] rounded-full border border-teal/25"
           style={{ transformStyle: "preserve-3d", transform: "rotateX(70deg)" }}
           animate={{ rotate: [0, 360] }}
-          transition={{ duration: 30, ease: "linear", repeat: Infinity }}
+          transition={{ duration: 34, ease: "linear", repeat: Infinity }}
         >
           <div className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-teal shadow-[0_0_20px_rgba(56,224,208,0.9)]" />
         </motion.div>
-
         <motion.div
-          className="absolute inset-[18%] rounded-full border border-teal/20"
+          className="absolute inset-[16%] rounded-full border border-teal/20"
           style={{ transformStyle: "preserve-3d", transform: "rotateX(70deg) rotateZ(60deg)" }}
           animate={{ rotate: [360, 0] }}
-          transition={{ duration: 24, ease: "linear", repeat: Infinity }}
+          transition={{ duration: 26, ease: "linear", repeat: Infinity }}
         >
           <div className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-teal-glow shadow-[0_0_16px_rgba(56,224,208,0.8)]" />
         </motion.div>
 
-        <motion.div
-          className="absolute inset-[3%] rounded-full border border-white/10"
-          style={{ transformStyle: "preserve-3d", transform: "rotateX(75deg) rotateZ(-30deg)" }}
-          animate={{ rotate: [0, -360] }}
-          transition={{ duration: 40, ease: "linear", repeat: Infinity }}
-        />
-
-        {/* Central floating primary cube */}
+        {/* Central floating cube composite */}
         <motion.div
           className="absolute left-1/2 top-1/2"
           style={{ x: "-50%", y: "-50%", transformStyle: "preserve-3d" }}
           animate={{ y: ["-52%", "-48%", "-52%"] }}
-          transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
+          transition={{ duration: 7, ease: "easeInOut", repeat: Infinity }}
         >
-          <div style={{ transformStyle: "preserve-3d", transform: "rotateX(-20deg) rotateY(30deg)" }}>
-            <Cube size={140} duration={22} />
+          <div style={{ transformStyle: "preserve-3d", transform: "rotateX(-22deg) rotateY(32deg)" }}>
+            <Cube size={170} duration={24} />
           </div>
         </motion.div>
 
-        {/* Orbiting secondary cubes / geometry */}
-        <motion.div
-          style={{ x: pAX, y: pAY }}
-          className="absolute left-[8%] top-[14%]"
-          animate={{ y: [0, -12, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div style={{ transformStyle: "preserve-3d", transform: "rotateX(-15deg) rotateY(25deg)" }}>
-            <Cube size={70} duration={14} color="rgba(56,224,208,0.9)" />
-          </div>
-        </motion.div>
-
-        <motion.div
-          style={{ x: pBX, y: pBY }}
-          className="absolute right-[6%] top-[22%]"
-          animate={{ y: [0, 14, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div style={{ transformStyle: "preserve-3d", transform: "rotateX(20deg) rotateY(-30deg)" }}>
-            <Cube size={54} duration={18} reverse color="rgba(180,200,255,0.8)" face="rgba(180,200,255,0.12)" />
-          </div>
-        </motion.div>
-
-        <motion.div
-          style={{ x: pCX, y: pCY }}
-          className="absolute bottom-[12%] left-[14%]"
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        >
-          <div style={{ transformStyle: "preserve-3d", transform: "rotateX(30deg) rotateY(15deg)" }}>
-            <Cube size={44} duration={20} color="rgba(56,224,208,0.7)" />
-          </div>
-        </motion.div>
-
-        <motion.div
-          style={{ x: pDX, y: pDY }}
-          className="absolute bottom-[16%] right-[12%]"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        >
-          <div style={{ transformStyle: "preserve-3d", transform: "rotateX(-25deg) rotateY(45deg)" }}>
-            <Cube size={62} duration={16} reverse />
-          </div>
-        </motion.div>
-
-        {/* Tiny sparkle points */}
-        <motion.div
-          className="absolute right-[28%] top-[8%] h-2 w-2 rounded-full bg-teal shadow-[0_0_18px_rgba(56,224,208,0.9)]"
-          animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.4, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute left-[30%] bottom-[8%] h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_14px_rgba(255,255,255,0.8)]"
-          animate={{ opacity: [0.2, 0.9, 0.2], scale: [1, 1.5, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-        />
-        <motion.div
-          className="absolute left-[52%] top-[18%] h-1 w-1 rounded-full bg-teal-glow shadow-[0_0_10px_rgba(56,224,208,0.9)]"
-          animate={{ opacity: [0.2, 1, 0.2] }}
-          transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-        />
+        {/* Secondary orbiters */}
+        <div className="pointer-events-none absolute left-[12%] top-[14%]" style={{ transformStyle: "preserve-3d" }}>
+          <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}>
+            <div style={{ transformStyle: "preserve-3d", transform: "rotateX(-15deg) rotateY(25deg)" }}>
+              <Cube size={62} duration={16} />
+            </div>
+          </motion.div>
+        </div>
+        <div className="pointer-events-none absolute right-[10%] top-[22%]" style={{ transformStyle: "preserve-3d" }}>
+          <motion.div animate={{ y: [0, 14, 0] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}>
+            <div style={{ transformStyle: "preserve-3d", transform: "rotateX(20deg) rotateY(-30deg)" }}>
+              <Cube size={48} duration={20} reverse color="rgba(180,200,255,0.8)" face="rgba(180,200,255,0.10)" />
+            </div>
+          </motion.div>
+        </div>
+        <div className="pointer-events-none absolute bottom-[14%] left-[16%]" style={{ transformStyle: "preserve-3d" }}>
+          <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}>
+            <div style={{ transformStyle: "preserve-3d", transform: "rotateX(30deg) rotateY(15deg)" }}>
+              <Cube size={40} duration={22} color="rgba(56,224,208,0.7)" />
+            </div>
+          </motion.div>
+        </div>
       </motion.div>
+
+      {/* Service cards — placed absolutely, animated in/out in a rolling window */}
+      <div className="pointer-events-none absolute inset-0">
+        {serviceCards.map((c, i) => {
+          const rad = (c.angle * Math.PI) / 180;
+          const left = 50 + Math.cos(rad) * c.radius;
+          const top = 50 + Math.sin(rad) * c.radius;
+          // Rolling window: each card is visible for a slice of the cycle.
+          const slot = i / serviceCards.length; // 0..1
+          const window = VISIBLE / serviceCards.length;
+          // times/values traverse a full cycle where card is visible over its slot window
+          const times = [0, slot, slot + window * 0.15, slot + window * 0.85, slot + window, 1]
+            .map((t) => Math.min(Math.max(t, 0), 1));
+          const opacity = [0, 0, 1, 1, 0, 0];
+          const scale = [0.85, 0.85, 1, 1, 0.85, 0.85];
+          const y = [10, 10, 0, 0, -10, -10];
+          const Icon = c.icon;
+          return (
+            <motion.div
+              key={c.label}
+              className="absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${left}%`, top: `${top}%` }}
+              animate={{ opacity, scale, y }}
+              transition={{ duration: CYCLE, times, repeat: Infinity, ease: "easeInOut", delay: -CYCLE * slot }}
+            >
+              <div className="flex items-center gap-2 rounded-2xl border border-teal/30 bg-[oklch(0.15_0.025_200/0.85)] px-3 py-2 shadow-[0_20px_50px_-25px_rgba(56,224,208,0.6)] backdrop-blur-xl">
+                <div className="grid h-6 w-6 place-items-center rounded-lg bg-teal/15 text-teal">
+                  <Icon className="h-3.5 w-3.5" />
+                </div>
+                <span className="whitespace-nowrap text-[0.72rem] font-semibold uppercase tracking-widest text-white/90">
+                  {c.label}
+                </span>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 }

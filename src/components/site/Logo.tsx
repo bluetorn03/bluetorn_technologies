@@ -1,13 +1,13 @@
-import BluetornLogo from "@/assets/BluetornLogo.png";
+import logoAsset from "@/assets/bluetorn-logo.png.asset.json";
 
 export function Logo({ className = "h-9 w-9" }: { className?: string }) {
   return (
     <img
-      src={BluetornLogo}
+      src={logoAsset.url}
       alt="BLUETORN Technologies"
       width={72}
       height={72}
-      className={`${className} object-contain`}
+      className={`${className} rounded-lg object-cover`}
     />
   );
 }
