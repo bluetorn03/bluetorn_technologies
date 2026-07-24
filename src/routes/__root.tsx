@@ -99,6 +99,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/ee0f63fb-3c90-4d7e-a9b5-821e3d7e4e42" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/ee0f63fb-3c90-4d7e-a9b5-821e3d7e4e42" },
     ],
+    script: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "BLUETORN Technologies",
+          "url": "https://bluetorn.com",
+          "logo": "https://bluetorn.com/BluetornLogo.webp",
+          "email": "info@bluetorn.com",
+          "telephone": "+91 77889 96579",
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91 77889 96579",
+              "contactType": "sales",
+              "email": "info@bluetorn.com"
+            },
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91 7788996549",
+              "contactType": "customer service",
+              "email": "contact@bluetorn.com"
+            }
+          ]
+        })
+      }
+    ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

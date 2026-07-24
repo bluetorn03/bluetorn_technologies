@@ -38,7 +38,7 @@ const cols = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t-2 border-teal/25 bg-ink text-white shadow-[0_-30px_80px_-40px_rgba(56,224,208,0.35)]">
+    <footer className="relative z-10 overflow-hidden border-t-2 border-teal/25 bg-ink text-white shadow-[0_-30px_80px_-40px_rgba(56,224,208,0.35)]">
       <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal to-transparent" />
       <div className="pointer-events-none absolute inset-0 grid-fade opacity-40" />
       <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-20 md:px-8 md:pt-32">
@@ -49,17 +49,29 @@ export function Footer() {
               BLUETORN Technologies engineers secure, scalable software and digital transformation
               programs for startups, SMEs and enterprises across India and beyond.
             </p>
-            <div className="mt-6 space-y-2 text-sm text-white/70">
+            <div className="mt-6 space-y-3 text-sm text-white/70">
               <div className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-teal" />
                 <span>Office 01 & 02, Sai Sagar Apartment, Ulwe, Navi Mumbai – 410206, MH, India</span>
               </div>
-              <a href="mailto:info@bluetorn.com" className="flex items-center gap-2 hover:text-teal">
-                <Mail className="h-4 w-4 text-teal" /> info@bluetorn.com
-              </a>
-              <a href="tel:+917788996549" className="flex items-center gap-2 hover:text-teal">
-                <Phone className="h-4 w-4 text-teal" /> +91 77889 96549
-              </a>
+              <div className="space-y-1.5 pt-1">
+                <div className="text-[0.7rem] font-semibold uppercase tracking-wider text-teal">Business Contact</div>
+                <a href="mailto:info@bluetorn.com" className="flex items-center gap-2 hover:text-teal">
+                  <Mail className="h-4 w-4 text-teal shrink-0" /> info@bluetorn.com
+                </a>
+                <a href="tel:+917788996579" className="flex items-center gap-2 hover:text-teal">
+                  <Phone className="h-4 w-4 text-teal shrink-0" /> +91 77889 96579
+                </a>
+              </div>
+              <div className="space-y-1.5 pt-1">
+                <div className="text-[0.7rem] font-semibold uppercase tracking-wider text-teal">General Contact</div>
+                <a href="mailto:contact@bluetorn.com" className="flex items-center gap-2 hover:text-teal">
+                  <Mail className="h-4 w-4 text-teal shrink-0" /> contact@bluetorn.com
+                </a>
+                <a href="tel:+917788996549" className="flex items-center gap-2 hover:text-teal">
+                  <Phone className="h-4 w-4 text-teal shrink-0" /> +91 7788996549
+                </a>
+              </div>
             </div>
           </div>
 

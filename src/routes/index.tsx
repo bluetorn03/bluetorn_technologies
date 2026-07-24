@@ -70,38 +70,37 @@ const process = [
 function Home() {
   return (
     <SiteLayout>
-      {/* HERO */}
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-ink text-white">
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <video
-            src={heroVideo}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-            className="hero-video h-full w-full object-cover scale-[1.03]"
-            style={{
-              transform: "translateZ(0) scale(1.03)",
-              willChange: "transform, opacity",
-              backfaceVisibility: "hidden",
-              WebkitBackfaceVisibility: "hidden",
-            }}
-          />
-          {/* Refined dark overlays — reduced opacity for ~35-40% video visibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/60 to-ink/45" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.19_0.03_200/0.5),oklch(0.13_0.025_200/0.7)_90%)]" />
-          <div className="absolute inset-0 grid-fade opacity-30" />
-          {/* Subtle vignette for depth — guides eyes toward center */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: "radial-gradient(ellipse 70% 65% at 50% 50%, transparent 45%, oklch(0.12 0.025 200 / 0.55) 100%)",
-            }}
-          />
-        </div>
+      {/* HOME PAGE FIXED BACKGROUND VIDEO LAYER */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <video
+          src={heroVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="hero-video h-full w-full object-cover scale-[1.03]"
+          style={{
+            transform: "translateZ(0) scale(1.03)",
+            willChange: "transform, opacity",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+          }}
+        />
+        {/* Refined dark overlays — ~35-40% video visibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/60 to-ink/45" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.19_0.03_200/0.5),oklch(0.13_0.025_200/0.7)_90%)]" />
+        <div className="absolute inset-0 grid-fade opacity-30" />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 70% 65% at 50% 50%, transparent 45%, oklch(0.12 0.025 200 / 0.55) 100%)",
+          }}
+        />
+      </div>
 
+      {/* HERO */}
+      <section className="relative z-10 flex min-h-screen items-center overflow-hidden bg-transparent text-white">
         <div className="relative mx-auto w-full max-w-7xl px-6 pt-32 pb-20 md:px-8 md:pt-36 md:pb-24">
           <div className="max-w-3xl">
             <div>
@@ -165,21 +164,32 @@ function Home() {
         </div>
       </section>
 
-      {/* INTRO STRIP */}
-      <section className="border-b border-border bg-surface">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-20 md:grid-cols-[1fr_1.2fr] md:px-8 md:py-24">
+      {/* INTRO STRIP — HERO SECOND SECTION UPGRADE */}
+      <section className="relative z-10 border-b border-border bg-surface shadow-2xl">
+        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 md:grid-cols-[1fr_1.15fr] md:px-8 md:py-28 lg:gap-16 items-center">
           <Reveal>
-            <div>
-              <SectionEyebrow>Bluetorn Technologies</SectionEyebrow>
-              <h2 className="mt-5 font-display text-3xl font-semibold text-balance md:text-4xl">
+            <div className="flex flex-col justify-center">
+              <SectionEyebrow>BLUETORN Technologies</SectionEyebrow>
+              <h2 className="mt-6 font-display text-3xl font-semibold leading-tight text-balance md:text-4xl lg:text-5xl">
                 Clean, performance engineering for businesses that refuse to feel ordinary.
               </h2>
-              <p className="mt-5 max-w-md text-muted-foreground">
+              <p className="mt-6 text-base leading-relaxed text-muted-foreground">
                 Founded in 2026 in Navi Mumbai, BLUETORN is a boutique software engineering studio
                 built for enterprises that value craft, security and long-term partnership over
                 shortcuts.
               </p>
-              <div className="mt-8">
+              <div className="mt-8 flex flex-wrap gap-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-teal/25 bg-teal/10 px-3.5 py-1.5 text-xs font-semibold text-teal">
+                  Senior Engineering Studio
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-teal/25 bg-teal/10 px-3.5 py-1.5 text-xs font-semibold text-teal">
+                  Zero Shortcuts
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-teal/25 bg-teal/10 px-3.5 py-1.5 text-xs font-semibold text-teal">
+                  Navi Mumbai, MH
+                </span>
+              </div>
+              <div className="mt-9">
                 <MagneticButton to="/about" variant="outline">
                   Learn More About Us <ArrowUpRight className="h-4 w-4" />
                 </MagneticButton>
@@ -187,16 +197,34 @@ function Home() {
             </div>
           </Reveal>
           <Reveal i={1}>
-            <div className="relative overflow-hidden rounded-3xl">
-              <img src={developer} alt="Software engineer at work" loading="lazy" width={1200} height={900} className="h-full w-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent" />
+            <div className="group relative overflow-hidden rounded-3xl border border-border/80 bg-card p-3 shadow-[0_20px_60px_-25px_oklch(0.19_0.03_200/0.2)] transition-all duration-500 hover:border-teal/50 hover:shadow-[0_30px_70px_-20px_oklch(0.72_0.13_190/0.2)]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+                <img
+                  src={developer}
+                  alt="Software engineer at work"
+                  loading="lazy"
+                  width={1200}
+                  height={900}
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent" />
+                <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl border border-white/15 bg-ink/80 p-4 backdrop-blur-md text-white shadow-lg">
+                  <div>
+                    <div className="text-[0.7rem] font-semibold text-teal uppercase tracking-widest">Engineering Excellence</div>
+                    <div className="text-sm font-semibold mt-0.5">High-Trust Codebases & Systems</div>
+                  </div>
+                  <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-teal/20 text-teal border border-teal/30">
+                    <Sparkles className="h-4 w-4" />
+                  </div>
+                </div>
+              </div>
             </div>
           </Reveal>
         </div>
       </section>
 
       {/* SERVICES */}
-      <section id="services" className="bg-background">
+      <section id="services" className="relative z-10 bg-background">
         <div className="mx-auto max-w-7xl px-6 py-24 md:px-8 md:py-32">
           <div className="mx-auto max-w-2xl text-center">
             <Reveal><SectionEyebrow>Our Services</SectionEyebrow></Reveal>
@@ -246,7 +274,7 @@ function Home() {
       </section>
 
       {/* PROCESS TIMELINE */}
-      <section className="relative overflow-hidden bg-ink text-white">
+      <section className="relative z-10 overflow-hidden bg-ink/75 backdrop-blur-[2px] text-white">
         <div className="absolute inset-0 grid-fade opacity-40" />
         <div className="relative mx-auto max-w-7xl px-6 py-24 md:px-8 md:py-32">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr]">
@@ -281,7 +309,7 @@ function Home() {
       </section>
 
       {/* FLAGSHIP / SHOWCASE */}
-      <section className="bg-surface">
+      <section className="relative z-10 bg-surface">
         <div className="mx-auto max-w-7xl px-6 py-24 md:px-8 md:py-32">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -328,7 +356,7 @@ function Home() {
       </section>
 
       {/* TECH STACK — dual marquee */}
-      <section className="border-y border-border bg-background">
+      <section className="relative z-10 border-y border-border bg-background">
         <div className="mx-auto max-w-7xl px-6 py-20 md:px-8">
           <Reveal>
             <div className="text-center">
@@ -346,7 +374,7 @@ function Home() {
       </section>
 
       {/* INDUSTRIES — real icons per sector */}
-      <section className="bg-background">
+      <section className="relative z-10 bg-background">
         <div className="mx-auto max-w-7xl px-6 py-24 md:px-8 md:py-28">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
             <div>
@@ -383,9 +411,8 @@ function Home() {
         </div>
       </section>
 
-
       {/* WHY BLUETORN */}
-      <section className="bg-surface">
+      <section className="relative z-10 bg-surface">
         <div className="mx-auto max-w-7xl px-6 py-24 md:px-8 md:py-28">
           <div className="mx-auto max-w-2xl text-center">
             <SectionEyebrow>Why BLUETORN</SectionEyebrow>
@@ -415,8 +442,8 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative overflow-hidden bg-ink text-white">
+      {/* CTA — LET'S BUILD */}
+      <section className="relative z-10 overflow-hidden bg-ink/75 backdrop-blur-[2px] text-white">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -left-24 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-teal/20 blur-[120px]" />
           <div className="absolute -right-24 top-1/3 h-[500px] w-[500px] rounded-full bg-teal-glow/10 blur-[120px]" />

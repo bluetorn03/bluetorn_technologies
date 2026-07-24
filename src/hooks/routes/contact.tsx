@@ -11,7 +11,7 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact BLUETORN Technologies — Navi Mumbai, India" },
-      { name: "description", content: "Get in touch with BLUETORN Technologies. Office in Ulwe, Navi Mumbai. Email info@bluetorn.com or call +91 77889 96549." },
+      { name: "description", content: "Get in touch with BLUETORN Technologies. Business: info@bluetorn.com / +91 77889 96579. General: contact@bluetorn.com / +91 7788996549." },
       { property: "og:title", content: "Contact BLUETORN Technologies" },
       { property: "og:description", content: "General, business, project or career enquiries — reach the right team fast." },
       { property: "og:type", content: "website" },
@@ -88,7 +88,7 @@ function Contact() {
                 <Logo className="h-12 w-12" />
                 <h2 className="mt-6 font-display text-2xl font-semibold">BLUETORN Technologies</h2>
                 <p className="mt-2 text-sm text-muted-foreground">Smarter Technology. Stronger Future.</p>
-                <div className="mt-8 space-y-5 text-sm">
+                <div className="mt-8 space-y-6 text-sm">
                   <div className="flex items-start gap-3">
                     <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-teal" />
                     <div>
@@ -100,21 +100,41 @@ function Contact() {
                       </div>
                     </div>
                   </div>
-                  <a href="mailto:info@bluetorn.com" className="flex items-start gap-3 hover:text-teal">
-                    <Mail className="mt-0.5 h-5 w-5 shrink-0 text-teal" />
-                    <div>
-                      <div className="font-semibold">Email</div>
-                      <div className="text-muted-foreground">info@bluetorn.com</div>
-                    </div>
-                  </a>
-                  <a href="tel:+917788996549" className="flex items-start gap-3 hover:text-teal">
-                    <Phone className="mt-0.5 h-5 w-5 shrink-0 text-teal" />
-                    <div>
-                      <div className="font-semibold">Phone</div>
-                      <div className="text-muted-foreground">+91 77889 96549</div>
-                    </div>
-                  </a>
-                  <div className="flex items-start gap-3">
+                  <div className="rounded-2xl border border-border/80 bg-secondary/50 p-4 space-y-3">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-teal">Business Enquiry</div>
+                    <a href="mailto:info@bluetorn.com" className="flex items-center gap-3 text-foreground hover:text-teal transition-colors">
+                      <Mail className="h-4 w-4 shrink-0 text-teal" />
+                      <div>
+                        <div className="text-xs text-muted-foreground">Business Email</div>
+                        <div className="font-medium">info@bluetorn.com</div>
+                      </div>
+                    </a>
+                    <a href="tel:+917788996579" className="flex items-center gap-3 text-foreground hover:text-teal transition-colors">
+                      <Phone className="h-4 w-4 shrink-0 text-teal" />
+                      <div>
+                        <div className="text-xs text-muted-foreground">Business Phone</div>
+                        <div className="font-medium">+91 77889 96579</div>
+                      </div>
+                    </a>
+                  </div>
+                  <div className="rounded-2xl border border-border/80 bg-secondary/50 p-4 space-y-3">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-teal">General Enquiry</div>
+                    <a href="mailto:contact@bluetorn.com" className="flex items-center gap-3 text-foreground hover:text-teal transition-colors">
+                      <Mail className="h-4 w-4 shrink-0 text-teal" />
+                      <div>
+                        <div className="text-xs text-muted-foreground">General Email</div>
+                        <div className="font-medium">contact@bluetorn.com</div>
+                      </div>
+                    </a>
+                    <a href="tel:+917788996549" className="flex items-center gap-3 text-foreground hover:text-teal transition-colors">
+                      <Phone className="h-4 w-4 shrink-0 text-teal" />
+                      <div>
+                        <div className="text-xs text-muted-foreground">General Phone</div>
+                        <div className="font-medium">+91 7788996549</div>
+                      </div>
+                    </a>
+                  </div>
+                  <div className="flex items-start gap-3 pt-1">
                     <Clock className="mt-0.5 h-5 w-5 shrink-0 text-teal" />
                     <div>
                       <div className="font-semibold">Working Hours</div>

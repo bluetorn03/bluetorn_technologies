@@ -132,6 +132,11 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [mobile, setMobile] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState<Record<number, boolean>>({});
+
+  const toggleMobileExpand = (idx: number) => {
+    setMobileExpanded((prev) => ({ ...prev, [idx]: !prev[idx] }));
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -261,7 +266,7 @@ export function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 34 }}
-              className="absolute right-0 top-0 flex h-full w-full max-w-sm flex-col gap-2 bg-[oklch(0.17_0.03_200)] p-6"
+              className="absolute right-0 top-0 flex h-full w-full max-w-sm flex-col gap-2 bg-[oklch(0.17_0.03_200)] p-6 shadow-2xl"
             >
               <div className="flex items-center justify-between">
                 <Wordmark tone="light" />
@@ -273,18 +278,85 @@ export function Navbar() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <div className="mt-6 flex flex-col gap-1 overflow-y-auto pr-1">
-                {nav.map((n) => (
-                  <Link
-                    key={n.label}
-                    to={n.to ?? "/"}
-                    onClick={() => setMobile(false)}
-                    className="rounded-2xl px-4 py-3 text-lg font-medium text-white/90 transition-colors hover:bg-white/5"
-                  >
-                    {n.label}
-                  </Link>
-                ))}
-                <div className="mt-4">
+              <div className="mt-6 flex flex-col gap-1 overflow-y-auto pr-1 pb-8">
+                {nav.map((n, i) => {
+                  const isExpanded = !!mobileExpanded[i];
+
+                  if (!n.mega) {
+                    return (
+                      <Link
+                        key={n.label}
+                        to={n.to ?? "/"}
+                        onClick={() => setMobile(false)}
+                        className="rounded-2xl px-4 py-3 text-lg font-medium text-white/90 transition-colors hover:bg-white/5"
+                      >
+                        {n.label}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <div key={n.label} className="rounded-2xl transition-colors">
+                      <button
+                        type="button"
+                        onClick={() => toggleMobileExpand(i)}
+                        className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-lg font-medium text-white/90 transition-colors hover:bg-white/5 ${
+                          isExpanded ? "bg-white/5 text-teal" : ""
+                        }`}
+                      >
+                        <span>{n.label}</span>
+                        <ChevronDown
+                          className={`h-5 w-5 opacity-70 transition-transform duration-300 ${
+                            isExpanded ? "rotate-180 text-teal" : ""
+                          }`}
+                        />
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.2, 0.7, 0.2, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="my-1 ml-4 border-l border-teal/30 pl-4 pr-2 space-y-4 py-2">
+                              {n.mega.map((sec) => (
+                                <div key={sec.heading}>
+                                  <div className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-teal">
+                                    {sec.heading}
+                                  </div>
+                                  <ul className="space-y-1">
+                                    {sec.items.map((it) => (
+                                      <li key={it.title}>
+                                        <Link
+                                          to={it.to}
+                                          onClick={() => setMobile(false)}
+                                          className="group flex items-center justify-between rounded-xl px-3 py-2 text-sm text-white/80 transition-colors hover:bg-white/5 hover:text-white"
+                                        >
+                                          <div>
+                                            <div className="font-medium">{it.title}</div>
+                                            {it.desc && (
+                                              <div className="text-[0.7rem] text-white/50">{it.desc}</div>
+                                            )}
+                                          </div>
+                                          <ArrowUpRight className="h-4 w-4 shrink-0 text-white/40 transition-transform group-hover:text-teal group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+
+                <div className="mt-6 pt-4 border-t border-white/10">
                   <MagneticButton to="/contact" variant="primary" onClick={() => setMobile(false)}>
                     Get in Touch <ArrowUpRight className="h-4 w-4" />
                   </MagneticButton>
